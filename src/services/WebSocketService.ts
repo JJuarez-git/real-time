@@ -1,21 +1,23 @@
-//import net from 'net';
+import { io, Socket } from "socket.io-client";
 
 export default class WebSocketService {
 
     private static _instance: WebSocketService;
-    private socket: WebSocket
-    //private client: net.Socket
+    public socket: Socket
+    private port = 9000
 
     private constructor() {
-        this.socket = new WebSocket("ws://localhost:6000")
-        this.socket.onmessage = function (event) {
-            console.log(event.data);
-          }
-        /* this.client = new net.Socket()
-        this.client.connect({port: 6000, host:'localhost'})
-        this.client.on('data', (data) => {
-            console.log(data.toString('utf-8'));
-          }); */
+        this.socket = io(`http://localhost:${this.port}`)
+        this.connection()
+    }
+
+    private connection = () => {
+        this.socket.on('connect', () => {
+            console.log(`[SOCKET]: Connected to socket server at port ${this.port} | ID: ${this.socket.id}`);
+        })
+        this.socket.on('disconnect', () => {
+            console.log(`[SOCKET]: Disconnected from socket server`);
+        })
     }
 
     public static get instance() {

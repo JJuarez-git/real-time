@@ -2,15 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ThemeProvider } from "@mui/material/styles";
-import { dark } from './ui/themes/dark';
+//import { dark } from './ui/themes/dark';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={dark}>
+    {/* <ThemeProvider theme={dark}> */}
       <App />
-    </ThemeProvider>
+    {/* </ThemeProvider> */}
   </React.StrictMode>
 );
