@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { io, Socket } from "socket.io-client";
 
 export default class WebSocketService {
@@ -8,16 +9,23 @@ export default class WebSocketService {
 
     private constructor() {
         this.socket = io(`http://localhost:${this.port}`)
-        this.connection()
+        this.log("Socket connected");
     }
 
-    private connection = () => {
-        this.socket.on('connect', () => {
-            console.log(`[SOCKET]: Connected to socket server at port ${this.port} | ID: ${this.socket.id}`);
+    public emit(event: string, payload?: any, callback?: Function) {
+        this.socket.emit(event, payload, callback)
+    }
+
+    public listen(event: string): Observable<any> {
+        return new Observable((Subscriber) => {
+            this.socket.on(event, (payload) => {
+                Subscriber.next(payload)
+            })
         })
-        this.socket.on('disconnect', () => {
-            console.log(`[SOCKET]: Disconnected from socket server`);
-        })
+    }
+
+    public log(...messages: string[]) {
+        console.log(`${new Date().toLocaleTimeString()} [SOCKET]: ${messages.join(" ")}`);
     }
 
     public static get instance() {
